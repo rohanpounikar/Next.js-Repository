@@ -1,3 +1,4 @@
+#Dockerfile for Nextjs app
 FROM node:18
 
 WORKDIR /app
