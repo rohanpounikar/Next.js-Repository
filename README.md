@@ -1,12 +1,16 @@
 # Next.js-Repository
 
-sudo npm run dev
+REQUIREMENT
+node:18 version or plus
+npm package manager
 
-http://localhost:3000
+RUN ON LOCALHOST
+npm run dev
 
-Build app
+DOCKER BUILD
 docker build -t my-app .
 
-Run app
+DOCKER RUN
 docker run -p 3000:3000 my-app
 
+Your application will be running on http://localhost:3000
