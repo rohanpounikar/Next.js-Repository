@@ -1,0 +1,36 @@
+pipeline {
+    // install node 18 on Jenkins node
+    agent any
+    tools {
+        node 'node 18'
+    }
+    environment {
+        GO114MODULE = 'on'
+        CGO_ENABLED = 0 
+        GOPATH = "${JENKINS_HOME}/jobs/${JOB_NAME}/builds/${BUILD_ID}"
+    }
+    stages {
+        stage("Test") {
+            steps {
+                echo 'UNIT TEST EXECUTION STARTED'
+                sh 'npm test'
+            }
+        }
+        stage("Build") {
+            steps {
+                echo 'BUILD EXECUTION STARTED'
+                sh 'node --version'
+                sh 'docker build . -t my-app:$BUILDID'
+            }
+        }
+        stage('Push') {
+            agent any
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'dockerhubPassword', usernameVariable: 'dockerhubUser')]) {
+                sh "docker login -u ${env.dockerhubUser} -p ${env.dockerhubPassword}"
+                sh 'docker push rohan150699/nextjs:$BUILDID'
+                }
+            }
+        }
+    }
+}
